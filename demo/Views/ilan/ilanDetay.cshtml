@@ -1,0 +1,301 @@
+﻿@using Kariyer.Models
+
+@{
+    ViewBag.Title = "İlanDetay";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Session["ilanid"] = Request.QueryString[0].ToString();
+    var ilanid = Session["ilanid"];
+    TempData["rawurl"] = Request.RawUrl;
+
+
+    using (kariyerEntities ctx = new kariyerEntities())
+    {
+
+        int ilan_id = Convert.ToInt32(Session["ilanid"]);
+        int k_id = Convert.ToInt32(Session["ID"]);
+
+        var kayıtkontrol = ctx.ilanBasvuru.Where(x => x.ilanID == ilan_id && x.kullaniciID == k_id).FirstOrDefault();
+
+        //
+        if (kayıtkontrol == null)
+        {
+
+
+            TempData["value_b"] = "b_yapılmamıs";
+
+
+        }
+        else
+        {
+            TempData["value_b"] = "b_yapılmıs";
+
+
+        }
+
+    }
+
+}
+<style>
+
+    .scroll {
+        height: 400px;
+        overflow: scroll;
+    }
+</style><style>
+	.alt_footer {
+		position: absolute;
+		bottom: 0 !important;
+		width: 100%;
+	}
+</style>
+
+
+<div class="container body-content ">
+	<div class="modal fade" id="myModal" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<a type="button" class="close" href="@Url.Action("Anasayfa", "Home")" data-dismiss="modal">&times;</a>
+					<h4 class="modal-title">Bilgi</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-2">
+						</div>
+						<div class="col-md-8">
+
+							<p>Başvurunuz Alınmıştır  </p>
+							<p>
+								S.S.S
+								<b>info@kariyercanlı.com</b> veya
+							</p>
+
+						</div>
+						<div class="col-md-2">
+							<div class="glyphicon glyphicon-sunglasses"></div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="col-md-9" style="border:1px solid #e8eef3;padding:10px 30px;">
+
+
+
+			<div class="row">
+
+				@using (Html.BeginForm())
+				{
+					<table>
+						<tbody>
+
+							@using (kariyerEntities ctx = new kariyerEntities())
+							{
+								var k_id = Convert.ToInt32(Session["ID"]);
+								var ilanIDD = Convert.ToInt32(ilanid);
+
+								var ilansayictrl = ctx.ilan_goruntulenme.Where(x => x.kullaniciID == k_id && x.ilanID == ilanIDD).FirstOrDefault();
+								if (ilansayictrl == null)
+								{
+									ctx.goruntulenmeInsertSP(ilanIDD, k_id, DateTime.Now);
+
+								}
+
+								var ilansayi = ctx.ilan_goruntulenme.Where(x => x.ilanID == ilanIDD).Count();
+
+								var ilanbasvuru = ctx.ilanBasvuru.Where(x => x.ilanID == ilanIDD).Count();
+
+								//insert
+
+
+								Session["firma_idx"] = 0;
+								int xx = Convert.ToInt32(ilanid);
+								//var ilandetayi = (from i in ctx.ilandetaySP()  where i.ilanid ==xx  select i);
+								var ilandetayi = (from i in ctx.ILANDETAY_VIEW where i.ilanID == xx select i).ToList();
+								//var ilandetayi = ctx.ilandetaySP().Where(x=>x.ilanid==xx);
+								if (ilandetayi != null)
+								{
+									foreach (var item in ilandetayi)
+									{
+										Session["firma_idx"] = item.firmaID;
+
+										<tr>
+											<td>
+												<div class="row">
+													<div class="col-md-8">
+														<h1>  @Html.Label(item.ilanAd)   </h1>
+														<p style="color:blue;">  İstanbul Avrupa Yakası </p>
+													</div>
+													<div class="col-md-4 text-right">
+														<a type="button" id="basvurubtn" class="btn btn-success btn-lg" href="@Url.Action("ilanbasvuru", "ilan", new { ilanid = Convert.ToInt32(ilanid), k_id = Convert.ToInt32(Session["ID"]) })">BAŞVURU YAP</a>
+														@ViewBag.Message
+													</div>
+												</div>
+
+												<div class="row">
+
+													<div class="col-md-3">
+														<p>@ilanbasvuru kişi başvurdu </p>
+													</div>
+													<div class="col-md-3">
+
+														<p>@ilansayi Görüntüleme</p>
+													</div>
+													<div class="col-md-3">
+														<p>  @Html.Label(item.ilanTarih.Value.ToLongDateString()) </p>
+													</div>
+
+												</div>
+
+
+										</tr>
+
+										<tr>
+											<td>
+												<p>@item.istanim.ToString()  </p>
+
+												<hr />
+												<p>@item.nitelik </p>
+											</td>
+
+
+										</tr>
+										<tr>
+											<td>
+												<h2>İlan Özeti</h2>
+												<p> Pozisyon:@item.pozisyonad</p>
+
+												<p> Sektör:@item.sektorad</p>
+												<p> Kategori:@item.egitim</p>
+												<p> Çalışma Şekli:@item.caslimaTanimi</p>
+												<p> Pozisyon Seviyesi:@item.seviye</p>
+												<p> Çalışma Yeri:@item.ilad - @item.ilcead</p>
+												<p> İlk Yayınlama Tarihi:@item.ilanTarih</p>
+												<p> Güncelleme Tarihi:@item.ilanGuncellemeTarihi </p>
+												<p> Son Başvuru Tarihi:@item.ilanSonBasvuruTarihi </p>
+
+											</td>
+										</tr>
+
+
+
+									}
+								}
+							}
+						</tbody>
+
+
+					</table>
+
+
+
+
+
+
+
+
+
+
+
+				}
+			</div>
+		</div>
+
+		<div class="col-md-3" style="border:1px solid #e8eef3;padding:10px 30px;padding-left:10px;">
+			<div style="overflow-y:scroll; overflow-x:hidden; height:400px;">
+
+				@using (kariyerEntities ctx = new kariyerEntities())
+				{
+					var firma_idx = Convert.ToInt32(Session["firma_idx"]);
+					var ilanlar = (from i in ctx.ilanlar where i.firmaID == firma_idx select i).ToList();
+					if (ilanlar != null)
+					{
+
+						<table class="table table-hover">
+							<tr>
+								<th>Diğer İlanlar</th>
+							</tr>
+							<tr>
+
+
+								@foreach (var item in ilanlar)
+								{
+
+								<tr>
+									<td>
+										<a href="/ilan/ilanDetay/?ilanid=@item.ilanID">@item.ilanAd</a>
+									</td>
+								</tr>
+
+
+							}
+
+
+
+							</table>
+						}
+					}
+
+
+
+
+
+
+			</div>
+
+
+		</div>
+
+	</div>
+
+
+	<script>
+            $(document).ready(function () {
+
+
+                if ('@TempData["value_b"]' != "" || '@TempData["value_b"]' != null) {
+                    if ('@TempData["value_b"]' == "b_yapılmamıs") {
+
+
+
+            }
+
+                 else  if ('@TempData["value_b"]' == "b_yapılmıs")
+                {
+                $("#basvurubtn").attr("disabled", true);
+                $("#basvurubtn").html("BASVURU YAPTINIZ").css({ "background-color": "#e6a9a9" });
+
+                }
+
+
+        }
+
+
+
+                   if ('@TempData["value_basvur"]' != "" || '@TempData["value_basvur"]' != null) {
+                    if ('@TempData["value_basvur"]' == "b_yapsın") {
+
+
+                $("#myModal").modal('show');
+            }
+
+                 else  if ('@TempData["value_basvur"]' == "b_yapmasın")
+                {
+                $("#basvurubtn").attr("disabled", true);
+                $("#basvurubtn").html("BASVURU YAPTINIZ").css({ "background-color": "#e6a9a9" });
+
+                }
+
+
+        }
+
+
+            });
+
+	</script>
+	</div>

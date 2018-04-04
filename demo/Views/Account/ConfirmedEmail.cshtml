@@ -1,0 +1,87 @@
+﻿@using Kariyer.Models
+
+@{
+	kullanici kulx = new kullanici();
+
+	kulx.kullaniciAdi = Request.QueryString[0].ToString();
+	kulx.guide = Request.QueryString[1].ToString();
+
+	using (kariyerEntities ctx = new kariyerEntities())
+	{
+		var pasif = (from i in ctx.kullanici select i).ToList();
+		foreach (var item in pasif)
+		{
+			if (item != null)
+			{
+				if (item.kullaniciAdi == kulx.kullaniciAdi && item.guide == null && item.aktifmi == false)
+				{
+					ctx.mailaktifGuncelleSP(kulx.guide, true, kulx.kullaniciAdi);
+					TempData["aktifdurum"] = "Mailiniz başarıyla aktifleştirildi.";
+				}
+				else
+				{
+					TempData["aktifdurum"] = "Mailinizi daha önce aktifleştirmişsiniz";
+
+				}
+			}
+
+
+
+
+		}
+	}
+}
+<style>
+ 
+	.alt_footer {
+		position: absolute;
+		bottom: 0 !important;
+		width: 100%;
+	}
+</style>
+<div class="container body-content ">
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div style="color:red;margin-bottom:10px;" class="row text-center">Kariyer v0.1</div>
+				<div class="panel panel-login">
+
+					<div class="panel-heading">
+
+						<div class="row">
+
+							<div class="col-xs-6">
+								<text class="active" style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-size:x-large; color:indigo">Login </text>
+
+							</div>
+						</div>
+						<hr>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12">
+								<form id="login-form" action="/Account/ConfirmedEmail" method="post" role="form" style="display: block;">
+
+
+
+								 
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-6 col-sm-offset-3">
+												@TempData["aktifdurum"] <a href="/Account/Login" class="form-control btn btn-register">BURADAN</a>giriş yapabilirsiniz
+
+											</div>
+										</div>
+									</div>
+								</form>
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>

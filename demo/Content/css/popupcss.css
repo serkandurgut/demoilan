@@ -1,0 +1,62 @@
+﻿ 
+.modal-content {
+	position: absolute !important;
+}
+
+
+.modal-header .close {
+	margin-top: 0px;
+}
+.checkmark {
+		background-color: mintcream;
+	}
+
+.close {
+	font-size: inherit !important;
+	line-height: 0 !important;
+	position: relative;
+	top: 5px;
+}
+.buttondivs:before {
+		clear: both;
+		content: "";
+	}
+  .close:hover {
+	color: darkred;
+	opacity: 1;
+	font-size: 45px !important
+}
+
+.well {
+	background-color: #e4ebf3 !important;
+	 
+}
+
+.modal {
+	-webkit-animation-name: fadeIn; /* Fade in the background */
+	-webkit-animation-duration: 0.7s;
+	animation-name: fadeIn;
+	animation-duration: 0.7s;
+}
+	.sil {
+		transition: all .2s ease-in-out;
+		text-align: center;
+		background-color: transparent;
+		padding: 0px;
+	}.sil:hover {
+			color: darkred;
+		}
+
+	.buttondivs {
+		overflow: hidden;
+		clear: both;
+	}
+
+#formsil {
+	display: inline!important;
+}
+#toggle {
+	width: 100px;
+	height: 100px;
+	background: #ccc;
+}

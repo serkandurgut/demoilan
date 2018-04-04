@@ -1,0 +1,13 @@
+﻿@media (min-width: 1200px) {
+    .col-md-offset-3 {
+        margin-left: 25%;
+        margin-top: 80px;
+        margin-bottom: 82.5px;
+    }
+}
+ @media(min-width: 1200px)
+ {
+   .navbar-right{
+        margin-right: 0 !important;
+    }
+ }

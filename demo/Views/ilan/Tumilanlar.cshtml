@@ -1,0 +1,190 @@
+﻿@using Kariyer.Models
+@model ilanlar
+@{
+
+	ViewBag.Title = "Tumilanlar";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+	.alt_footer {
+		position: absolute;
+		bottom: 0 !important;
+		width: 100%;
+	}
+</style>
+<script src="~/Scripts/illerilceler.js" type="text/javascript"></script>
+
+<script src="~/Scripts/il_ilcce_json.js"></script>
+
+
+<style type="text/css">
+	body {
+		font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+		color: #444;
+		font-size: 13px;
+	}
+
+
+	#iltbl {
+		border-spacing: 10px;
+		border-collapse: unset !important;
+	}
+
+	p, div, ul, li {
+		padding: 0px;
+		margin: 0px;
+	}
+</style>
+<div class="container body-content ">
+
+	<div class="col-md-3 ">
+		<h2>Tercihler</h2>
+
+		<form name="arama" method="get" action="/ilan/ilanfilitre">
+
+			<table id="iltbl">
+				<tr>
+
+					<td>
+						<div class="form-group">
+
+							<select class="form-control   SelectBox " name="il" id="il">
+								<option>Bir İl Seçiniz</option>
+
+							</select>
+						</div>
+				<tr>
+					<td>
+
+						<div class="form-group">
+
+							<select class="form-control SelectBox" name="ilce" id="ilce" disabled></select>
+						</div>
+
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="form-group  ">
+							<select class="form-control SelectBox " name="tarih">
+								<option>Tarih aralığı seçiniz</option>
+								<option value="1">Son 1 gün</option>
+								<option value="2">Son 3 gün</option>
+								<option value="3">Son 5 gün</option>
+								<option value="15">Son 15 gün</option>
+								<option value="31">Son 1 ay</option>
+								<option value="5">gün sayısı giriniz</option>
+
+
+							</select>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+
+						<div class="form-group">
+
+							<select class="form-control SelectBox" name="sektors" id="sektors">
+								<option>Firma Sektörü</option>
+								@{
+									using (kariyerEntities ctx = new kariyerEntities())
+									{
+
+
+										var sektors = (from i in ctx.sektor select i).ToList();
+										foreach (var item in sektors)
+										{
+
+
+
+											<option value="@item.sektorid"> @item.sektorad</option>
+
+										}
+									}
+								}
+							</select>
+						</div>
+
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="submit" class="form-control" value="Yenile" />
+					</td>
+				</tr>
+
+
+
+
+
+			</table>
+
+
+
+		</form>
+
+
+	</div>
+
+
+
+
+	<h2>Tum İlanlar</h2>
+
+
+
+
+
+
+	<div class="col-md-9">
+
+		@using (kariyerEntities ctx = new kariyerEntities())
+		{
+			var ilanlar = (from i in ctx.firmailan()
+						   select i).ToList();
+			if (ilanlar != null)
+			{
+				/**/
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>İlan Başlık</th>
+							<th>Firma</th>
+							<th>Tarih</th>
+						</tr>
+					</thead>
+					<tbody>
+
+
+						@foreach (var item in ilanlar)
+						{
+							/**/
+							<tr>
+								<td>
+									<a href="/ilan/ilanDetay/?ilanid=@item.ilanID">@item.ilanAd</a>
+
+
+								</td>
+								<td>
+									@item.firmaAdi
+
+								</td>
+								<td>
+									@item.ilanTarih.Value.ToShortDateString()
+
+								</td>
+							</tr>
+
+
+						}
+
+
+					</tbody>
+				</table>
+			}
+		}
+	</div>
+</div>
+

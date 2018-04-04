@@ -1,0 +1,179 @@
+﻿@model Kariyer.Models.Modeller.LoginModel
+
+@{
+
+
+
+
+}
+<style>
+	.alt_footer {
+		position: absolute;
+		bottom: 0 !important;
+		width: 100%;
+	}
+	.loginregcontent {
+		padding-top: 100px !important;
+	}
+</style>
+ 
+<div class="container body-content  loginregcontent">
+
+	<div class="modal fade" id="myModal" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<a type="button" class="close" href="@Url.Action("Anasayfa", "Home")" data-dismiss="modal">&times;</a>
+					<h4 class="modal-title">Bilgi</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-2">
+						</div>
+						<div class="col-md-8">
+
+							<p>Hesabınız Aktifleştirilmemiş </p>
+
+
+						</div>
+						<div class="col-md-2">
+							<div class="glyphicon glyphicon-alert"></div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div style="color:red;margin-bottom:10px;" class="row text-center">Kariyer v0.1</div>
+				<div class="panel panel-login">
+
+					<div class="panel-heading">
+
+						<div class="row">
+
+							<div class="col-xs-6">
+								<text class="active" style="font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-size:x-large; color:indigo">Login </text>
+
+							</div>
+						</div>
+						<hr>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12">
+								<form id="login-form" action="/Account/Login" method="post" role="form" style="display: block;">
+
+
+									<div class="form-group">
+										@Html.TextBoxFor(kulx => kulx.kullaniciAdi, new { @id = "kul", @placeholder = "Email yada kullanıcı adınız", @class = "form-control" })
+										@Html.ValidationMessageFor(kulx => kulx.kullaniciAdi)
+
+
+									</div>
+									<div class="form-group">
+										@Html.PasswordFor(kulx => kulx.parola, new { @id = "pass", @placeholder = "Password", @class = "form-control" })
+										@Html.ValidationMessageFor(km => km.parola, "", new { @class = "danger-text" })
+
+
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-6 col-sm-offset-3">
+												@TempData["loginst"]
+
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<p style="color:red; margin-left:20px; margin-bottom:20px;">
+												@TempData["loginmesaj"]
+											</p>
+											<div class="col-sm-6 col-sm-offset-3">
+												<input type="submit" name="register-submit" id="login-submit" tabindex="7" class="form-control btn btn-login" value="Giriş Yap">
+
+											</div>
+										</div>
+									</div>
+								</form>
+
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="bottomside"></div>
+	<script>
+            $(document).ready(function () {
+
+
+
+
+                   if ('@TempData["login_a"]' != "" || '@TempData["login_a"]' != null) {
+                       if ('@TempData["login_a"]' == "var") {
+                           $("#myModal").modal('show');
+                       }
+                       else {
+                           $("#myModal").modal('hide');
+
+
+
+
+                       }
+
+                       if ('@TempData["loginred"]' != "" || '@TempData["loginred"]' != null) {
+                       if ('@TempData["loginred"]' == "var") {
+                           $("#kul").css({ "border-color": "red" });
+                           $("#pass").css({ "border-color": "red" });
+            }
+                       else if('@TempData["loginred"]' == "yok"){
+                           $("#kul").css({ "border-color": "#ccc" });
+                       }
+        }
+		 
+
+                @*if ('@TempData["login_k"]' != "" || '@TempData["login_k"]' != null) {
+                    if ('@TempData["login_k"]' == "var") {
+                        $("#ep").css({ "border-color": "red" });
+                    }
+                    else if ('@TempData["login_k"]' == "yok") {
+                        $("#ep").css({ "border-color": "#ccc" });
+                    }
+                }*@
+
+
+                           @*if ('@TempData["pw_k"]' != "" || '@TempData["pw_k"]' != null) {
+                       if ('@TempData["pw_k"]' == "var") {
+                           $("#kul").css({ "border-color": "red"});
+            }
+                       else if('@TempData["pw_k"]' == "yok"){
+                           $("#kul").css({ "border-color": "#ccc" });
+                       }
+                }*@
+
+                       //login kontrol kırmızı
+                       //
+
+
+
+        }
+
+
+            });
+
+	</script>
+</div>
+ 
+
+ 

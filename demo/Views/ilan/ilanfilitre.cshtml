@@ -1,0 +1,298 @@
+﻿@model IEnumerable<Kariyer.Models.ILANDETAY_VIEW>
+@using Kariyer.Models
+@{
+	ViewBag.Title = "ilanfilitre";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+}
+    <script src="~/Scripts/jquery.sumoselect.js"></script>
+    <script src="~/Scripts/jquery.sumoselect.min.js"></script>
+    <link href="~/Content/css/sumoselect.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            window.asd = $('.SlectBox').SumoSelect({ csvDispCount: 3, selectAll: true, captionFormatAllSelected: "Yeah, OK, so everything." });
+            window.test = $('.testsel').SumoSelect({ okCancelInMulti: true, captionFormatAllSelected: "Yeah, OK, so everything." });
+
+            window.testSelAll = $('.testSelAll').SumoSelect({ okCancelInMulti: true, selectAll: true });
+
+            window.testSelAll2 = $('.testSelAll2').SumoSelect({ selectAll: true });
+
+            window.testSelAlld = $('.SlectBox-grp').SumoSelect({ okCancelInMulti: true, selectAll: true, isClickAwayOk: true });
+
+            window.Search = $('.search-box').SumoSelect({ csvDispCount: 3, search: true, searchText: 'Enter here.' });
+            window.sb = $('.SlectBox-grp-src').SumoSelect({ csvDispCount: 3, search: true, searchText: 'Enter here.', selectAll: true });
+            window.searchSelAll = $('.search-box-sel-all').SumoSelect({ csvDispCount: 3, selectAll: true, search: true, searchText: 'Enter here.', okCancelInMulti: true });
+            window.searchSelAll = $('.search-box-open-up').SumoSelect({ csvDispCount: 3, selectAll: true, search: false, searchText: 'Enter here.', up: true });
+            window.Search = $('.search-box-custom-fn').SumoSelect({
+                csvDispCount: 3, search: true, searchText: 'Enter here.', searchFn: function (haystack, needle) {
+                    var re = RegExp('^' + needle.replace(/([^\w\d])/gi, '\\$1'), 'i');
+                    return !haystack.match(re);
+                }
+            });
+
+            window.groups_eg_g = $('.groups_eg_g').SumoSelect({ selectAll: true, search: true });
+
+
+            $('.SlectBox').on('sumo:opened', function (o) {
+                console.log("dropdown opened", o)
+                ////alert(o);
+            });
+
+        });
+    </script>
+    <script>
+        $(function () {
+            //aynı ajaxmı kullanıcağımdan dolayı ajaxsetup oluştuyorum
+            $.ajaxSetup({
+                type: "post",
+                url: "/ilan/IlIlce",//controlerımda gidicek olan yerim
+                dataType: "json"
+            });
+            $.extend({
+                ilGetir: function () {
+                    $.ajax({
+                        //datamızı gönderiyoruz
+                        data: { "tip": "ilGetir" },
+                        success: function (sonuc) {
+                            //gelen sonucumuz kontrol ediyoruz ona göre selectimze append işlemi gerçekleştiyoruz
+                            if (sonuc.ok) {
+
+                                $.each(sonuc.text, function (index, item) {
+                                    var optionhtml = '<option value="' + item.Value + '">' + item.Text + '</option>';
+                                    $("#il").append(optionhtml);
+
+                                });
+
+                            } else {
+                                $.each(sonuc.text, function (index, item) {
+                                    var optionhtml = '<option value="' + item.Value + '">' + item.Text + '</option>';
+                                    $("#il").append(optionhtml);
+
+                                });
+
+                            }
+                        }
+                    });
+                },
+                ilceGetir: function (ilID) {
+
+                    $.ajax({
+                        //ekstra olarak functionumaza gelen ilID mizi gönderiyoruz
+                        data: { "ilID": ilID, "tip": "ilceGetir" },
+                        success: function (sonuc) {
+                            //bir önceki kayıtları temizliyorum
+                            $("#ilce option").remove();
+                            if (sonuc.ok) {
+                                //disabled true yapıyorum
+                                $("#ilce").prop("disabled", false);
+                                $.each(sonuc.text, function (index, item) {
+                                    var optionhtml = '<option value="' + item.Value + '">' + item.Text + '</option>';
+                                    $("#ilce").append(optionhtml);
+                                });
+
+                            } else {
+                                $.each(sonuc.text, function (index, item) {
+                                    var optionhtml = '<option value="' + item.Value + '">' + item.Text + '</option>';
+                                    $("#ilce").append(optionhtml);
+
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+            //ilgetirimizi çalıştıyoruz
+            $.ilGetir();
+            //il selectimizde değişiklik olduğunda çalışacak func
+            $("#il").on("change", function () {
+                //seçili olan id alıyoruz
+                var ilID = $(this).val();
+                //seçili olan idmizi ilceGetir'imze gönderiyoruz
+                $.ilceGetir(ilID);
+            });
+        });
+    </script>
+    @*<script src="~/Scripts/illerilceler.js" type="text/javascript"></script>*@
+
+    <style type="text/css">
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #444;
+            font-size: 13px;
+        }
+
+        #iltbl {
+            border-spacing: 10px;
+            border-collapse: unset !important;
+        }
+
+        p, div, ul, li {
+            padding: 0px;
+            margin: 0px;
+        }
+    </style>
+	<div class="container body-content ">
+		<div class="col-md-3 ">
+			<h2>Tercihler</h2>
+
+			@* il secim *@
+
+			@*@using (Html.BeginForm("ilanf", "ilan", FormMethod.Post, new { enctype = "multipart/form-data" }))
+			{
+
+
+				@Html.DropDownList("iller", ViewBag.ilid as SelectList, "İl Tercihi", htmlAttributes: new { @class = "form-control input-sm", onchange = "Getilce()" })
+
+				<br />
+
+
+				@Html.DropDownList("ilceler", ViewBag.ilcelers as SelectList, "İlçe Tercihi", new { @id = "DDLilce", @class = "form-control input-sm" })
+
+
+				<button type="submit" class="btn btn-default">Yenile</button>
+
+
+
+			}*@
+
+			<form name="arama" method="GET" action="/ilan/ilanfilitre">
+				<table id="iltbl">
+					<tr>
+
+						<td>
+							<div class="form-group">
+
+								<select class="form-control   SelectBox " name="iller" id="il">
+									<option>Bir İl Seçiniz</option>
+
+								</select>
+							</div>
+					<tr>
+						<td>
+
+							<div class="form-group">
+
+								<select class="form-control SelectBox" name="ilceler" id="ilce" disabled></select>
+							</div>
+
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form-group  ">
+								<select class="form-control SelectBox " name="tarih">
+									<option>Tarih aralığı seçiniz</option>
+									<option value="1">Son 1 gün</option>
+									<option value="2">Son 3 gün</option>
+									<option value="3">Son 5 gün</option>
+									<option value="15">Son 15 gün</option>
+									<option value="31">Son 1 ay</option>
+									<option value="5">gün sayısı giriniz</option>
+
+
+								</select>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+
+							<div class="form-group">
+
+								<select class="form-control SelectBox" name="sektors" id="sektors">
+									<option>Firma Sektörü </option>
+
+									@using (kariyerEntities ctx = new kariyerEntities())
+								{
+
+									var sektor = (from i in ctx.sektor select i).ToList();
+									foreach (var item in sektor)
+									{
+
+
+
+										<option value="@item.sektorad">@item.sektorad</option>
+
+								}
+							}
+
+								</select>
+							</div>
+
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="submit" class="form-control" value="Yenile" />
+						</td>
+					</tr>
+
+
+
+
+
+				</table>
+
+
+
+			</form>
+
+
+		</div>
+
+
+		
+		<div class="col-md-9">
+			@TempData["YOK"]
+			@using (kariyerEntities ctx = new kariyerEntities())
+		{
+
+			if (Model != null)
+			{
+
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>İlan Başlık</th>
+							<th>Firma</th>
+							<th>Tarih</th>
+						</tr>
+					</thead>
+					<tbody>
+
+
+
+					<tbody>
+
+
+						@foreach (var item in Model)
+					{
+						<tr>
+							<td>
+								<a href="/ilan/ilanDetay/?ilanid=@item.ilanID">@item.ilanAd</a>
+
+
+							</td>
+							<td>
+								@item.firmaID
+
+							</td>
+							<td>
+								@item.ilanTarih.Value.ToShortDateString()
+
+							</td>
+						</tr>
+
+
+				}
+
+
+					</tbody>
+				</table>
+		}
+	}
+		</div>
+
+
+		</div>

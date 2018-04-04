@@ -1,0 +1,301 @@
+﻿@{
+
+
+}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<style>
+	</style>
+	@*Gerekli js*@
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+	<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="jquery.scrollTo-min.js"></script>
+	<script src="jquery.scrollTo.js"></script>
+	<script src="js/jquery.ui.core.js"></script>
+	<script src="js/jquery.ui.widget.js"></script>
+	<script src="js/jquery.ui.datepicker.js"></script>
+	<script src="~/Scripts/sumooooo.js"></script>
+	<script src="~/Scripts/jquery.sumoselect.js"></script>
+	<script src="~/Scripts/jquery.sumoselect.min.js"></script>
+	<script src="~/Scripts/div_gizleme.js"></script>
+	<script src="~/Scripts/jquery_datepick_tr.js"></script>
+	<script src="~/Scripts/modernizr-2.6.2.js"></script>
+
+	@*Gerekli js*@
+	@*Lokal CSSLER*@
+	<link href="~/Content/css/dropdownprofilCSS.css" rel="stylesheet" />
+	<link href="~/Content/css/custombox.min.css" rel="stylesheet" />
+	<link href="~/Content/css/Register.css" rel="stylesheet" />
+	<link href="~/Content/css/dropdownprofilCSS.css" rel="stylesheet" />
+	<link href="~/Content/css/bodyCSS.css" rel="stylesheet" />
+	<link href="~/Content/css/myfooter.css" rel="stylesheet" />
+	<link href="~/Content/css/footer.css" rel="stylesheet" />
+	<link href="~/Content/css/profil.css" rel="stylesheet" />
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+	<link href="~/Content/css/select2.min.css" rel="stylesheet" />
+	<link href="~/Content/css/sumoselect.css" rel="stylesheet" />
+	@*Lokal CSSLER*@
+
+
+
+</head>
+<body>
+    
+        @*YÖNLENDİRME BARIMIZ *@
+	<div class="nav-item"> 
+		<nav class="navbar nav navbar-default navbar-fixed-top">
+			<div class="container-fluid container-bas">
+				<div class="navbar-header">
+					<a class="navbar-brand" style="padding:0px;" href="@Url.Action("AnaSayfa","Home")">
+
+
+						<img src="/Content/images/Logo/logo.png" width="150" height="50" />
+					</a>
+				</div>
+				<ul class="nav navbar-nav">
+					<li><a href="@Url.Action("AnaSayfa","Home")">KARİYERİM</a></li>
+					<li><a href="@Url.Action("ozgecmis","Profil")">ÖZGEÇMİŞ</a></li>
+
+					<li><a href="@Url.Action("Tumilanlar","ilan")">TÜM İLANLAR</a></li>
+
+				</ul>
+
+				@if (Session["username"] == null)
+			{
+				<ul class="nologin navbar-right">
+
+					<li class="nologin dropdown">
+
+						<input type="button" value="Giriş Yap" class="btn dropbtn" onclick="parent.location.href='@Url.Action("Login", "Account")' " />
+
+					</li>
+
+					<li class="dropdown">
+
+						<button class="btn dropbtn ">Kayit OL</button>
+						<div class="nologin dropdown-content">
+							<a href="/Account/Register/?rols=1">İş Arayan</a>
+							<a href="/Account/Register/?rols=2">İş Veren</a>
+							<a href="/Account/Register/?rols=3">Stajyer</a>
+
+
+						</div>
+					</li>
+
+				</ul>
+
+		}
+		else
+		{
+			<ul class="nav navbar-nav navbar-right">
+
+				<li class="dropdown">
+
+					<button class="dropbtn">(@Session["username"])</button>
+					<div class="dropdown-content">
+						<a href="@Url.Action("Tumilanlar","ilan")">Profil</a>
+						<a href="@Url.Action("OzgecmisOlustur","profil")">Özgeçmiş</a>
+						<a href="@Url.Action("tucrubeler","profil")">Tecrubeler</a>
+						<a href="#">Randevular</a>
+						<a href="#">Mesajlar</a>
+						<a href="@Url.Action("Cikis","Home")">Çıkış</a>
+					</div>
+				</li>
+			</ul>
+	}
+
+
+				<form class="navbar-form navbar-center" action="/HOME/ARA">
+					<div class="input-group col-xs-4">
+						<input type="text" class="form-control" placeholder="İş Ara" name="search">
+						<div class="input-group-btn">
+							<button class="btn btn-default" type="submit">
+								<i class="glyphicon glyphicon-search"></i>
+							</button>
+						</div>
+					</div>
+				</form>
+				@*YÖNLENDİRME BARIMIZ *@
+
+			</div>
+		</nav>
+	</div>
+        @*BODY RENDER *@
+
+     
+
+            @RenderBody()
+ 
+        @*BODY RENDER *@
+
+        @*FOOTERIMIZ*@
+
+		<div class="alt_footer">
+
+
+			<hr />
+
+			<footer class="footer1">
+
+				<div class="container">
+					<div class="row">
+						<!-- row -->
+
+						<div class="col-lg-3 col-md-3">
+							<!-- widgets column left -->
+							<ul class="list-unstyled clear-margins">
+								<!-- widgets -->
+
+								<li class="widget-container widget_nav_menu">
+									<!-- widgets list -->
+
+									<h1 class="title-widget">ADAY İŞLEMLERİ</h1>
+
+									<ul>
+										<li><a href="#"><i class="fa fa-angle-double-right"></i> İş İlanları</a></li>
+										<li><a href="@Url.Action("Login","Home")"><i class="fa fa-angle-double-right"></i> Aday Giriş</a></li>
+										<li><a href="#"><i class="fa fa-angle-double-right"></i> Özgeçmiş Oluştur</a></li>
+
+									</ul>
+
+								</li>
+
+							</ul>
+
+
+						</div><!-- widgets column left end -->
+
+
+
+						<div class="col-lg-3 col-md-3">
+							<!-- widgets column left -->
+
+							<ul class="list-unstyled clear-margins">
+								<!-- widgets -->
+
+								<li class="widget-container widget_nav_menu">
+									<!-- widgets list -->
+
+									<h1 class="title-widget">Firma İşlemleri</h1>
+
+									<ul>
+										<li><a href="#"><i class="fa fa-angle-double-right"></i>  Firma Giriş</a></li>
+										<li><a href="#"><i class="fa fa-angle-double-right"></i> İş İlanı Yayınlama</a></li>
+										<li><a href="#"><i class="fa fa-angle-double-right"></i>  Firma Kayıt</a></li>
+
+									</ul>
+
+								</li>
+
+							</ul>
+
+
+						</div><!-- widgets column left end -->
+
+
+
+						<div class="col-lg-3 col-md-3">
+							<!-- widgets column left -->
+
+							<ul class="list-unstyled clear-margins">
+								<!-- widgets -->
+
+								<li class="widget-container widget_nav_menu">
+									<!-- widgets list -->
+
+									<h1 class="title-widget">Kurumsal</h1>
+
+									<ul>
+
+										<li><a href="#"><i class="fa fa-angle-double-right"></i> Hakkımızda</a></li>
+										<li><a href="#"><i class="fa fa-angle-double-right"></i> İletişim</a></li>
+										<li><a href="#"><i class="fa fa-angle-double-right"></i> Kariyer</a></li>
+										<li><a href="#"><i class="fa fa-angle-double-right"></i> S.S.S</a></li>
+
+									</ul>
+
+								</li>
+
+							</ul>
+
+
+						</div><!-- widgets column left end -->
+
+
+						<div class="col-lg-3 col-md-3">
+							<!-- widgets column center -->
+
+
+
+							<ul class="list-unstyled clear-margins">
+								<!-- widgets -->
+
+								<li class="widget-container widget_recent_news">
+									<!-- widgets list -->
+
+									<h1 class="title-widget">İletişim Detay </h1>
+
+									<div class="footerp">
+
+										<h2 class="title-median">e-iş. Ltd.</h2>
+										<p><b>Email id:</b> <a href="mailto:info@e-is.com">info@e-is.com</a></p>
+										<p><b>Helpline Numbers </b>
+
+										<p><b>İstanbul / Beşiktaş</b></p>
+										<p><b>Telefon : </b>444 50 58, </p>
+
+									</div>
+
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+			</footer>
+			<!--header-->
+			<div class="footer-bottom">
+				<div class="footer-bottom container">
+					<div class="row">
+						<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+							<div class="copyright">
+								© 2018, e-iş
+
+							</div>
+
+
+						</div>
+						<div class="col-md-4 col-sm-2"></div>
+						<div class="myfooter">
+
+
+
+
+
+							<ul class="social social-circle">
+								<li> <a href="#" class="icoFacebook"><i class="fa fa-facebook"></i></a></li>
+								<li> <a href="#" class="icoTwitter"> <i class="fa fa-twitter"></i> </a> </li>
+								<li> <a href="#" class="icoGoogle"> <i class="fa fa-google-plus"></i> </a> </li>
+								<li> <a href="#" class="icoRss"> <i class="fa fa-youtube"></i> </a> </li>
+							</ul>
+
+
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+    @*FOOTERIMIZ*@
+
+</body>
+</html>

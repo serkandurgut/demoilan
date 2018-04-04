@@ -1,0 +1,114 @@
+﻿@using Kariyer.Models
+@{
+	ViewBag.Title = "AnaSayfa";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+}
+
+<style>
+	table tr:hover {
+		cursor: pointer;
+	}
+	.anasayfa {
+		position: relative;
+		top: 50px;
+	}
+</style> 
+<div class="container body-content anasayfa">
+	<div class="container">
+
+		<link href="~/Content/css/AccountcontrollerCSS.css" rel="stylesheet" />
+		<h3><b>GÜNCEL İLANLAR</b></h3>
+		@using (kariyerEntities ctx = new kariyerEntities())
+		{
+			var ilanlar = (from i in ctx.firmailan()
+						   select i).OrderByDescending(i => i.ilanID).Take(20);
+			if (ilanlar != null)
+			{
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>İlan Başlık</th>
+							<th>Firma</th>
+							<th>Tarih</th>
+						</tr>
+					</thead>
+					<tbody>
+
+
+						@foreach (var item in ilanlar)
+						{
+							<tr>
+								<td>
+									<a href="/ilan/ilanDetay/?ilanid=@item.ilanID">@item.ilanAd</a>
+
+
+								</td>
+								<td>
+									@item.firmaAdi
+
+								</td>
+								<td>
+									@item.ilanTarih.Value.ToShortDateString()
+
+								</td>
+							</tr>
+
+
+						}
+
+
+					</tbody>
+				</table>
+			}
+		}
+
+
+	</div>
+
+	<hr />
+	<div class="container-fluid">
+		<div> <h3><b>FAVORİ İLANLAR</b></h3></div>
+		<table class="table table-hover">
+
+			<thead>
+				<tr>
+					<th>İLAN</th>
+					<th>TARİH</th>
+
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td> <a href="#">PERSONEL ALIİZMİRMI</a></td>
+					<td>04.03.2018</td>
+
+				</tr>
+				<tr>
+					<td> <a href="#">PERSONEL ALIİZMİRMI</a>I</td>
+					<td>04.03.2018</td>
+
+				</tr>
+				<tr>
+					<td> <a href="#">PERSONEL ALIİZMİRMI</a></td>
+					<td>04.03.2018</td>
+
+				</tr>
+
+				<tr>
+					<td> <a href="#">PERSONEL ALIİZMİRMI</a></td>
+					<td>04.03.2018</td>
+
+				</tr>
+
+				<tr>
+					<td> <a href="#">PERSONEL ALIİZMİRMI</a></td>
+					<td>04.03.2018</td>
+
+				</tr>
+
+			</tbody>
+		</table>
+	</div>
+	</div>
